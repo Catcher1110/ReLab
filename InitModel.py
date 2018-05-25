@@ -47,7 +47,7 @@ class LossHistory(keras.callbacks.Callback):
 
 def build_model(layers):
     model = Sequential()
-    model.add(LSTM(layers[1], input_shape=(25, 12), return_sequences=True))
+    model.add(LSTM(layers[1], input_shape=(25, 14), return_sequences=True))
     model.add(LSTM(layers[2], return_sequences=False))
     # model.add(Dense(layers[3], activation="softmax"))
     model.add(Dense(layers[3]))
@@ -58,8 +58,8 @@ def build_model(layers):
     return model
 
 
-def Train_model(data, modelname):
-    model = build_model([12, 256, 32, 2])
+def Train_model(data, layers, modelname):
+    model = build_model(layers)
     x_train, y_train = data['x_train'], data['y_train']
     history = LossHistory()
     model.fit(

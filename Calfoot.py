@@ -15,13 +15,14 @@ def Cal_foot(data):
     Length = m / SensorNumber - 1
     # print("Length: " + str(Length))
 
-    Time = np.delete(K, range(8), 1)
+    # Time = np.delete(K, range(8), 1)
     # time_step = sum(Time) / Length / 1000.0
     # print("time_step: " + str(time_step))
 
     Time_index = [0.0]
     for i in range(Length):
-        Time_index.append(Time_index[-1] + Time[7 * i + 6] / 1000.0)
+        #  Time_index.append(Time_index[-1] + Time[7 * i + 6] / 1000.0)
+        Time_index.append(Time_index[-1] + 1 / 30.0)
     Time_index = np.array(Time_index)
     # print("Time_index: " + str(Time_index.shape))
 
@@ -108,7 +109,7 @@ def Cal_foot(data):
     # print("vel_reight.shape: " + str(vel_reight.shape))
 
     for i in range(1, len(vel_reight)):
-        vel_reight[i, :] = vel_reight[i - 1, :] + filterData[1, i, 1:4] * 9.8 * (Time_index[i] - Time_index[i - 1])
+        vel_reight[i, :] = vel_reight[i - 1, :] + filterData[0, i, 1:4] * 9.8 * (Time_index[i] - Time_index[i - 1])
         if stationary_r[i] == 1:
             vel_reight[i, :] = [0.0, 0.0, 0.0]
 
@@ -132,8 +133,9 @@ def Cal_foot(data):
 
     delStart_r = []
     delEnd_r = []
+
     for i in range(len(stationaryEnd_r)):
-        if stationaryStart_r[i + 1] - stationaryEnd_r[i] <= 2:
+        if stationaryStart_r[i + 1] - stationaryEnd_r[i] <= 0:
             delStart_r.append(i + 1)
             delEnd_r.append(i)
     stationaryStart_r = np.delete(stationaryStart_r, delStart_r, axis=0)
@@ -142,7 +144,7 @@ def Cal_foot(data):
     delStart_l = []
     delEnd_l = []
     for i in range(len(stationaryEnd_l)):
-        if stationaryStart_l[i + 1] - stationaryEnd_l[i] <= 2:
+        if stationaryStart_l[i + 1] - stationaryEnd_l[i] <= 0:
             delStart_l.append(i + 1)
             delEnd_l.append(i)
     stationaryStart_l = np.delete(stationaryStart_l, delStart_l, axis=0)
@@ -227,56 +229,6 @@ def Cal_foot(data):
 
     res = {'Stationary_r': stationary_sort_r, 'Position_r': pos_right,
            'Stationary_l': stationary_sort_l, 'Position_l': pos_left}
-
-    '''fig0 = plt.figure()
-    plt.title('Displacement')
-    plt.xlabel('X /s')
-    plt.ylabel('Y /m')
-    # plt.plot(Time_index[:500], pos_left[:500, 0], 'b')
-    # plt.plot(Time_index[:500], pos_left[:500, 1], 'r')
-    # plt.plot(Time_index[:500], pos_left[:500, 2], 'k')
-    plt.plot(Time_index[:500], stationary_sort_l[:500], 'b')
-    plt.plot(Time_index[:500], stationary_sort_r[:500], 'r')
-    plt.show()'''
-
-    '''fig0 = plt.figure()
-    plt.title('Displacement')
-    plt.xlabel('X /s')
-    plt.ylabel('Y /m')
-    plt.plot(Time_index[:500], posi[:500], 'b')'''
-
-    '''fig1 = plt.figure()
-    plt.title('Acceleration')
-    plt.xlabel('Time/s')
-    plt.ylabel('Acc/ m/s^2')
-    plt.plot(Time_index, add_acc[0, :], 'r')
-    plt.plot(Time_index, stationary_sort, 'b')
-
-    fig2 = plt.figure()
-    plt.title('Right foot displacement')
-    plt.xlabel('X /m')
-    plt.ylabel('Y /m')
-    plt.plot(pos_right[:, 0], pos_right[:, 1], 'bo')
-
-    fig3 = plt.figure()
-    plt.title('Acceleration')
-    plt.xlabel('Time/s')
-    plt.ylabel('Acc/ m/s^2')
-    plt.plot(Time_index, add_acc[0, :], 'r')
-    plt.plot(Time_index, stationary, 'b')
-
-    fig4 = plt.figure()
-    plt.title('Velocity before drift restrain')
-    plt.xlabel('Time /s')
-    plt.ylabel('Velocity /m/s')
-    plt.plot(Time_index, -vel_store[:, 1])
-
-    fig5 = plt.figure()
-    plt.title('Velocity after drift restrain')
-    plt.xlabel('Time /s')
-    plt.ylabel('Velocity /m/s')
-    plt.plot(Time_index, -vel_reight[:, 1])
-    plt.show()'''
 
     '''frep = open('report.txt', 'w')
     frep.write(filename + '\r\n')

@@ -14,7 +14,7 @@ def Cal_angle(scale, data):
     data = np.array(data)
     m = data.shape[0]
     l = m / 7
-    K = np.delete(data, [1, 2, 3, 9], 1)
+    K = np.delete(data, [8], 1)
 
     # Initial pose
     O1 = np.array([0, 0, 0])
@@ -134,7 +134,7 @@ def Cal_angle(scale, data):
 
         # angle_knee1 = acos(dot(O2O3(2:4), O3O4(2:4)) / (norm(O2O3(2:4))*norm(O3O4(2:4))))*(180 / pi);
         q_knee1 = Qu.quatmultiply(Qu.quatinv(O3_qt), O2_qt)[0, :]
-        angle_knee1_new = abs((180 / np.pi) * np.arcsin(2 * (q_knee1[0] * q_knee1[2] - q_knee1[1] * q_knee1[3])))
+        angle_knee1_new = abs(np.arcsin(2 * (q_knee1[0] * q_knee1[2] - q_knee1[1] * q_knee1[3])))
 
         O5_t = O4_t + Qu.quatmultiply(Qu.quatmultiply(O4_qt, O4O5_ini), Qu.quatinv(O4_qt))[0, :]
         O4O5 = Qu.quatmultiply(Qu.quatmultiply(O4_qt, O4O5_ini), Qu.quatinv(O4_qt))[0, :]
@@ -165,37 +165,37 @@ def Cal_angle(scale, data):
 
         q_up1 = Qu.quatmultiply(Qu.quatinv(O2_qt), O1_qt)[0, :]
         angle_up1_a = np.arctan2(2 * (q_up1[0] * q_up1[1] + q_up1[2] * q_up1[3]),
-                                                 1 - 2 * (np.square(q_up1[1]) + np.square(q_up1[2])))
+                                 1 - 2 * (np.square(q_up1[1]) + np.square(q_up1[2])))
         angle_up1_b = np.arcsin(2 * (q_up1[0] * q_up1[2] - q_up1[1] * q_up1[3]))
         angle_up1_c = np.arctan2(2 * (q_up1[0] * q_up1[3] + q_up1[1] * q_up1[2]),
-                                                 1 - 2 * (np.square(q_up1[2]) + np.square(q_up1[3])))
+                                 1 - 2 * (np.square(q_up1[2]) + np.square(q_up1[3])))
 
         q_knee1 = Qu.quatmultiply(Qu.quatinv(O3_qt), O2_qt)[0, :]
-        angle_knee1_new = abs((180 / np.pi) * np.arcsin(2 * (q_knee1[0] * q_knee1[2] - q_knee1[1] * q_knee1[3])))
+        angle_knee1_new = abs(np.arcsin(2 * (q_knee1[0] * q_knee1[2] - q_knee1[1] * q_knee1[3])))
 
         q_ft1 = Qu.quatmultiply(Qu.quatinv(O4_qt), O3_qt)[0, :]
         angle_ft1_a = np.arctan2(2 * (q_ft1[0] * q_ft1[1] + q_ft1[2] * q_ft1[3]),
-                                                 1 - 2 * (np.square(q_ft1[1]) + np.square(q_ft1[2])))
+                                 1 - 2 * (np.square(q_ft1[1]) + np.square(q_ft1[2])))
         angle_ft1_b = np.arcsin(2 * (q_ft1[0] * q_ft1[2] - q_ft1[1] * q_ft1[3]))
         angle_ft1_c = np.arctan2(2 * (q_ft1[0] * q_ft1[3] + q_ft1[1] * q_ft1[2]),
-                                                 1 - 2 * (np.square(q_ft1[2]) + np.square(q_ft1[3])))
+                                 1 - 2 * (np.square(q_ft1[2]) + np.square(q_ft1[3])))
 
         q_up2 = Qu.quatmultiply(Qu.quatinv(O6_qt), O1_qt)[0, :]
         angle_up2_a = np.arctan2(2 * (q_up2[0] * q_up2[1] + q_up2[2] * q_up2[3]),
-                                                 1 - 2 * (np.square(q_up2[1]) + np.square(q_up2[2])))
+                                 1 - 2 * (np.square(q_up2[1]) + np.square(q_up2[2])))
         angle_up2_b = np.arcsin(2 * (q_up2[0] * q_up2[2] - q_up2[1] * q_up2[3]))
         angle_up2_c = np.arctan2(2 * (q_up2[0] * q_up2[3] + q_up2[1] * q_up2[2]),
-                                                 1 - 2 * (np.square(q_up2[2]) + np.square(q_up2[3])))
+                                 1 - 2 * (np.square(q_up2[2]) + np.square(q_up2[3])))
 
         q_knee2 = Qu.quatmultiply(Qu.quatinv(O7_qt), O6_qt)[0, :]
         angle_knee2_new = np.arcsin(2 * (q_knee2[0] * q_knee2[2] - q_knee2[1] * q_knee2[3]))
 
         q_ft2 = Qu.quatmultiply(Qu.quatinv(O8_qt), O7_qt)[0, :]
         angle_ft2_a = np.arctan2(2 * (q_ft2[0] * q_ft2[1] + q_ft2[2] * q_ft2[3]),
-                                                 1 - 2 * (np.square(q_ft2[1]) + np.square(q_ft2[2])))
+                                 1 - 2 * (np.square(q_ft2[1]) + np.square(q_ft2[2])))
         angle_ft2_b = np.arcsin(2 * (q_ft2[0] * q_ft2[2] - q_ft2[1] * q_ft2[3]))
         angle_ft2_c = np.arctan2(2 * (q_ft2[0] * q_ft2[3] + q_ft2[1] * q_ft2[2]),
-                                                 1 - 2 * (np.square(q_ft2[2]) + np.square(q_ft2[3])))
+                                 1 - 2 * (np.square(q_ft2[2]) + np.square(q_ft2[3])))
 
         PPP[i, 0, 0] = P_O2[0]
         PPP[i, 0, 1] = P_O2[1]
