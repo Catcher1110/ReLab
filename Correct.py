@@ -6,6 +6,7 @@ from keras.models import load_model
 
 
 def Correct(data, modelname):
+    #  data: a dictionary made by CorrectData.Correct_Data()
     model = load_model(modelname)
     x_correct, y_wrong = data['x_correct'], data['y_wrong']
     y_correct = model.predict(x_correct)

@@ -2,8 +2,10 @@ import numpy as np
 import Quaternions as Qu
 import readfile
 
+
 def Cal_angle(scale, data):
     # Scale is a dictionary, containing the length information
+    # data shape: (7 * N) * 9 list
     height = 180.0 # scale['height']
     Upper_leg_length = 0.232 * height  # scale['Upper_leg_length']
     Lower_leg_length = 0.247 * height  # scale['Lower_leg_length']
@@ -14,7 +16,7 @@ def Cal_angle(scale, data):
     data = np.array(data)
     m = data.shape[0]
     l = m / 7
-    K = np.delete(data, [8], 1)
+    K = np.delete(data, [1, 2, 3, 8], 1)
 
     # Initial pose
     O1 = np.array([0, 0, 0])

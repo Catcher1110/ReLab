@@ -4,6 +4,7 @@ import Calangle
 
 
 def Train_Correct_Data(raw_data):
+    #  raw_data is a list made by readfile.loadfile()
     Angle = Calangle.Cal_angle(1, raw_data)
     # Length of the sequence
     seq_len = 25
@@ -22,6 +23,7 @@ def Train_Correct_Data(raw_data):
 
 
 def Correct_Data(raw_data):
+    #  raw_data is a list made by readfile.loadfile()
     Angle = Calangle.Cal_angle(1, raw_data)
     # Length of the sequence
     seq_len = 25

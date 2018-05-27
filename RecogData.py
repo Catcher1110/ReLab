@@ -5,6 +5,7 @@ import Calfoot
 
 
 def Process_data(filename):
+    # filename string
     raw_data = readfile.loadfile(filename)
 
     data = Calfoot.Cal_foot(raw_data)
@@ -48,6 +49,7 @@ def Process_data(filename):
 
 
 def Train_Recog_Data(filename, *args):
+    # filename: string
     '''
     raw_data = readfile.loadfile(filename)
     Angle = Calangle.Cal_angle(1, raw_data)
@@ -72,19 +74,33 @@ def Train_Recog_Data(filename, *args):
     return data
 
 
-def Recog_Data(raw_data):
-    Angle = Calangle.Cal_angle(1, raw_data)
+def Recog_Data(filename):
+    #  filename: string
+    raw_data = readfile.loadfile(filename)
+    data = Calfoot.Cal_foot(raw_data)
+    p1, p2 = [], []
+    for i in range(len(data['Position_r'])):
+        p1.append(np.sqrt(np.sum(np.square(data['Position_r'][i, :]))))
+        p2.append(np.sqrt(np.sum(np.square(data['Position_l'][i, :]))))
+
+    i = 0
+    while p1[i] == 0 and p2[i] == 0:
+        i = i + 1
+
+    j = len(p1) - 1
+    last_p1, last_p2 = p1[-1], p2[-1]
+    while abs(p1[j] - last_p1) < 0.01 and abs(p2[j] - last_p2) < 0.01:
+        j = j - 1
+
+    Angle = Calangle.Cal_angle(1, raw_data)[i:j, :]
     # Length of the sequence
     seq_len = 25
-    sequence_length = seq_len + 1
     data_temp = []
-    for index in range(len(Angle) - sequence_length + 1):
-        data_temp.append(Angle[index:index + sequence_length, :])
+    for index in range(len(Angle) - seq_len + 1):
+        data_temp.append(Angle[index:index + seq_len, :])
 
     data_temp = np.array(data_temp)
     data = {}
-    data['x_correct'] = np.delete(data_temp, [3, 10], 2)[:, :-1, :]
-    data['y_wrong'] = np.delete(data_temp, [0, 1, 2, 4, 5, 6, 7, 8, 9, 11, 12, 13], 2)[:, -1, :]
-    data['raw_Angle'] = np.array(Angle)
+    data['x_action'] = data_temp
 
     return data
